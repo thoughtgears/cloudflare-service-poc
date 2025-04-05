@@ -1,0 +1,56 @@
+version: "2"
+
+linters:
+  enable:
+    - dupword
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - ginkgolinter
+    - gosec
+    - reassign
+    - staticcheck
+    - unused
+    - revive
+    - nlreturn
+    - lll
+  disable:
+    - tagalign
+    - depguard
+    - wsl
+  settings:
+    lll:
+      line-length: 150
+  exclusions:
+    generated: strict
+    warn-unused: true
+    presets:
+      - comments
+      - std-error-handling
+      - common-false-positives
+    rules:
+      - path: _test\.go
+        linters:
+          - gocyclo
+          - errcheck
+          - dupl
+          - gosec
+      - path-except: _test\.go
+        linters:
+          - forbidigo
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+
+# Options for analysis running.
+run:
+  timeout: 5m
+  relative-path-mode: gomod
+  issues-exit-code: 2
+  tests: false
+  go: '1.24'
+  concurrency: 4
