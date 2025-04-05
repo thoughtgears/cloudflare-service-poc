@@ -4,6 +4,7 @@ ifneq (,$(wildcard .env))
 endif
 
 GIT_SHA := $(shell git rev-parse --short HEAD)
+GIT_REPO := "github.com/thoughtgears/cloudflare-tunnels-poc"
 
 .PHONY: dev lint build
 
@@ -15,7 +16,7 @@ lint:
 	hadolint Dockerfile
 
 build:
-	docker build --platform linux/amd64 -t $(DOCKER_REPO)/$(SERVICE_NAME) .
+	docker build --platform linux/amd64 --build-arg SRC_PATH=$(GIT_REPO) -t $(DOCKER_REPO)/$(SERVICE_NAME) .
 	docker tag $(DOCKER_REPO)/$(SERVICE_NAME):latest $(DOCKER_REPO)/$(SERVICE_NAME):$(GIT_SHA)
 
 push:
@@ -30,6 +31,6 @@ deploy:
 		--allow-unauthenticated \
 		--project $(GCP_PROJECT_ID) \
 		--set-env-vars GIT_SHA=$(GIT_SHA) \
-		--concurrency 1 \
-		--cpu 0.5 \
+		--concurrency 20 \
+		--cpu 1 \
 		--memory 128Mi

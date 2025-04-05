@@ -16,6 +16,12 @@ linters:
     - revive
     - nlreturn
     - lll
+    - govet
+    - gocritic
+    - gocyclo
+    - dupl
+    - wrapcheck
+    - prealloc
   disable:
     - tagalign
     - depguard
@@ -23,6 +29,8 @@ linters:
   settings:
     lll:
       line-length: 150
+    gocyclo:
+      min-complexity: 15 # Adjust threshold as needed (e.g., 10, 15, 20)
   exclusions:
     generated: strict
     warn-unused: true
