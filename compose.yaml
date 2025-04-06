@@ -1,0 +1,24 @@
+services:
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    command:
+      - tunnel
+      - -no-autoupdate
+      - --metrics
+      - localhost:60123
+      - run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    networks:
+     - tunnel_network
+
+  app:
+    build: .
+    networks:
+      - tunnel_network
+    links:
+      - tunnel
+
+networks:
+  tunnel_network:
+   driver: bridge

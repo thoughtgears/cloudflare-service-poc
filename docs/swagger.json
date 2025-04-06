@@ -1,0 +1,422 @@
+{
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server for managing users.",
+        "title": "User Service",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.example.com/support",
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/users": {
+            "get": {
+                "description": "get all users currently stored",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "List all users",
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved list of users",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.User"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "add a new user to the store based on JSON payload",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create a new user",
+                "parameters": [
+                    {
+                        "description": "User data to create",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CreateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successfully created user",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Error or Invalid Request Format",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "description": "get user by ID string from path parameter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get a single user by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "User ID (UUID)",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved user",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "update user data for the given ID based on JSON payload (PUT semantics)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update an existing user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "User ID (UUID)",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User data to update",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully updated user",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation Error or Invalid Request Format",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "remove user from the store by ID string from path parameter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete a user by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "User ID (UUID)",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successfully deleted user (No Content)"
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handlers.CreateUserRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "email",
+                "first_name",
+                "last_name",
+                "phone"
+            ],
+            "properties": {
+                "address": {
+                    "description": "Address is the user's physical address. (Required)",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Email is the user's unique email address. (Required, must be valid email format)",
+                    "type": "string"
+                },
+                "first_name": {
+                    "description": "FirstName is the user's given name. (Required)",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "last_name": {
+                    "description": "LastName is the user's family name or surname. (Required)",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "phone": {
+                    "description": "Phone is the user's primary phone number. (Required)",
+                    "type": "string"
+                },
+                "preferences": {
+                    "description": "Preferences contains the user's notification settings (Email/SMS).",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.Preferences"
+                        }
+                    ]
+                }
+            }
+        },
+        "handlers.UpdateUserRequest": {
+            "type": "object",
+            "required": [
+                "address",
+                "email",
+                "first_name",
+                "last_name",
+                "phone"
+            ],
+            "properties": {
+                "active": {
+                    "description": "Active indicates whether the user's account should be active.",
+                    "type": "boolean"
+                },
+                "address": {
+                    "description": "Address is the user's physical address. (Required)",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Email is the user's unique email address. (Required, must be valid email format)",
+                    "type": "string"
+                },
+                "first_name": {
+                    "description": "FirstName is the user's given name. (Required)",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "last_name": {
+                    "description": "LastName is the user's family name or surname. (Required)",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "phone": {
+                    "description": "Phone is the user's primary phone number. (Required)",
+                    "type": "string"
+                },
+                "preferences": {
+                    "description": "Preferences contains the user's notification settings (Email/SMS).",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.Preferences"
+                        }
+                    ]
+                }
+            }
+        },
+        "models.Preferences": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "Email indicates if the user wants email notifications (true = yes, false = no).",
+                    "type": "boolean"
+                },
+                "sms": {
+                    "description": "SMS indicates if the user wants SMS text message notifications (true = yes, false = no).",
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.User": {
+            "type": "object",
+            "properties": {
+                "active": {
+                    "description": "Active indicates whether the user's account is currently active (true) or inactive (false).",
+                    "type": "boolean"
+                },
+                "address": {
+                    "description": "Address is the user's physical address (currently stored as a single string).\nConsider using a structured Address type for more detail if needed in the future.",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "CreatedAt records the exact date and time when the user record was created in the system.",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "Email is the user's unique email address, used for login and communication.",
+                    "type": "string"
+                },
+                "first_name": {
+                    "description": "FirstName is the user's given name.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "ID is the unique identifier for the user, typically a UUID.",
+                    "type": "string"
+                },
+                "last_name": {
+                    "description": "LastName is the user's family name or surname.",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "Phone is the user's primary phone number.",
+                    "type": "string"
+                },
+                "preferences": {
+                    "description": "Preferences embeds the notification settings for the user.",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.Preferences"
+                        }
+                    ]
+                },
+                "updated_at": {
+                    "description": "UpdatedAt records the exact date and time when the user record was last modified.",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

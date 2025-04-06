@@ -36,6 +36,16 @@ type CreateUserRequest struct {
 // On successful creation, it responds with HTTP 201 Created and a JSON object
 // representing the newly created user (including system-generated fields like ID).
 // On failure during user creation, it responds with HTTP 500 Internal Server Error.
+// @Summary		Create a new user
+// @Description	add a new user to the store based on JSON payload
+// @Tags			users
+// @Accept			json
+// @Produce		json
+// @Param			user	body		handlers.CreateUserRequest	true	"User data to create"
+// @Success		201		{object}	models.User					"Successfully created user"
+// @Failure		400		{object}	map[string]any				"Validation Error or Invalid Request Format"
+// @Failure		500		{object}	map[string]string			"Internal Server Error"
+// @Router			/users [post]
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var req CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

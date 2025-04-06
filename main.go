@@ -6,8 +6,11 @@ import (
 	"github.com/kelseyhightower/envconfig"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/thoughtgears/cloudflare-tunnels-poc/config"
+	_ "github.com/thoughtgears/cloudflare-tunnels-poc/docs"
 	"github.com/thoughtgears/cloudflare-tunnels-poc/router"
 	"github.com/thoughtgears/cloudflare-tunnels-poc/services"
 )
@@ -31,16 +34,30 @@ func init() {
 	}
 }
 
-// main is the entry point of the application.
-// It initializes the necessary services, sets up the HTTP router and middleware,
-// determines the host and port to listen on based on configuration, and starts
-// the Gin HTTP server. It logs a fatal error if the server fails to start.
+// @title			User Service
+// @version		1.0
+// @description	This is a sample server for managing users.
+// @termsOfService	http://swagger.io/terms/
+
+// @contact.name	API Support
+// @contact.url	http://www.example.com/support
+// @contact.email	support@example.com
+
+// @license.name	Apache 2.0
+// @license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host		localhost:8080
+// @BasePath	/
+// @schemes	https
 func main() {
 	// --- Dependency Initialization ---
 	userService := services.NewUserService()
 
 	// --- Router Setup ---
 	routerEngine := router.NewRouter(cfg, userService)
+
+	// --- Init swagger Paths ---
+	routerEngine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// --- Server Configuration ---
 	// Listen on all interfaces in production/default, only localhost in debug

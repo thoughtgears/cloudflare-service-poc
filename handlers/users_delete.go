@@ -16,6 +16,16 @@ import (
 // On successful deletion, it responds with HTTP 204 No Content.
 // If the user specified by the ID is not found, it responds with HTTP 404 Not Found.
 // For other deletion failures, it responds with HTTP 500 Internal Server Error.
+// @Summary		Delete a user by ID
+// @Description	remove user from the store by ID string from path parameter
+// @Tags			users
+// @Accept			json
+// @Produce		json
+// @Param			id	path		string				true	"User ID (UUID)"	Format(uuid)
+// @Success		204	{object}	nil					"Successfully deleted user (No Content)"
+// @Failure		404	{object}	map[string]string	"User not found"
+// @Failure		500	{object}	map[string]string	"Internal Server Error"
+// @Router			/users/{id} [delete]
 func (h *UserHandler) DeleteUser(c *gin.Context) {
 	userID := c.Param("id")
 

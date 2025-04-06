@@ -43,6 +43,18 @@ type UpdateUserRequest struct {
 // the updated user.
 // If the user specified by the ID is not found, it responds with HTTP 404 Not Found.
 // For other update failures, it responds with HTTP 500 Internal Server Error.
+// @Summary		Update an existing user
+// @Description	update user data for the given ID based on JSON payload (PUT semantics)
+// @Tags			users
+// @Accept			json
+// @Produce		json
+// @Param			id		path		string						true	"User ID (UUID)"	Format(uuid)
+// @Param			user	body		handlers.UpdateUserRequest	true	"User data to update"
+// @Success		200		{object}	models.User					"Successfully updated user"
+// @Failure		400		{object}	map[string]any				"Validation Error or Invalid Request Format"
+// @Failure		404		{object}	map[string]string			"User not found"
+// @Failure		500		{object}	map[string]string			"Internal Server Error"
+// @Router			/users/{id} [put]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
 	userID := c.Param("id")
 	var req UpdateUserRequest
